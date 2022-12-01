@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="css/style.css">
+        <script src="javascript/request-url.js"></script>
+        <script src="javascript/fetch-data.js"></script>
+    </head>
+    <body>
+        <div class="topnav">
+            <div>go-balancer configuration</div>
+        </div> 
+        <div class="main-container">
+            <div class="paper">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Hostname</th>
+                            <th>Port</th>
+                            <th>Status</th>
+                            <th class="noborder"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="backend-table-data">
+    
+                    </tbody>
+                </table>
+            </div>
+            <div class="divider"></div>
+            <div class="paper createform">
+                <form id="addbackendform">
+                    <h2>Add Backend</h2>
+                    <label for="host">Hostname:</label><br>
+                    <input type="text" id="host" name="host"><br>
+                    <label for="port">Port:</label><br>
+                    <input type="number" id="port" name="port"><br>
+                    <input type="submit" value="Add Backend">
+                  </form> 
+            </div>
+        </div>
+
+        <script src="javascript/modify-backends.js"></script>
+    </body>
+</html>

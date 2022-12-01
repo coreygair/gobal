@@ -1,0 +1,9 @@
+strategy:
+    name: ROUND_ROBIN
+backends:
+    - host: localhost
+      port: 8081
+    - host: localhost
+      port: 8082
+port: 8080
+sticky: True

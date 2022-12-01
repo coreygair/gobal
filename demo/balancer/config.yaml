@@ -1,0 +1,10 @@
+strategy:
+    name: ROUND_ROBIN
+backends:
+    - host: "server-a"
+      port: 80
+    - host: "server-b"
+      port: 80
+    - host: "server-c"
+      port: 80
+port: 80

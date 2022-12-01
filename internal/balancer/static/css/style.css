@@ -1,0 +1,117 @@
+:root {
+    --bg: #212121;
+    --bg-text: white;
+    
+    --nav: #000000;
+
+    --primary: #BB86FA;
+    --primary-text: white;
+
+    --secondary: #03DAC6;
+    --secondary-text: white;
+
+    --error: #CF6679;
+    --error-text: white;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    background-color: var(--bg);
+    color: var(--bg-text);
+}
+
+/* Add a black background color to the top navigation */
+.topnav {
+    background-color: var(--nav);
+    color: var(--bg-text);
+    overflow: hidden;
+    height: 75px;
+}
+
+.topnav div {
+    font-weight: bold;
+    float: left;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+    font-size: large;
+}
+  
+.main-container {
+    margin-top:50px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    height: 100%;
+}
+
+.table {
+    border-collapse: collapse;
+    border: 2px double black;
+}
+
+.table th, .table td {
+    border-color: black;
+    border-width: 2px;
+    border-style: solid;
+    padding: 5px;
+}
+
+.table th {
+    background-color: var(--secondary);
+    color: var(--secondary-text);
+}
+
+th.noborder, td.noborder {
+    border-style: hidden;
+    border-left: 1px black;
+    background: transparent;
+}
+
+.alive {
+    background-color: var(--secondary);
+    color: var(--secondary-text);
+    font-weight: bold;
+}
+.dead {
+    background-color: var(--error);
+    color: var(--error-text);
+    font-weight: bold;
+}
+
+.error {
+    background-color: red;
+    color: black;
+    margin: 30px;
+    padding: 15px;
+    border-radius: 5px;
+    min-width: 200px;
+    text-align: center;
+}
+
+.createform {
+    padding-left: 50px;
+    padding-right: 50px;
+}
+
+.createform input {
+    margin-bottom: 12px;
+}
+
+.paper {
+    background-color: var(--primary);
+    color: var(--primary-text);
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 4px;
+    
+}
+
+.divider {
+    width: 75px;
+    background-color: transparent;
+    border: none
+}
