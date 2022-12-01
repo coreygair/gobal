@@ -1,7 +1,7 @@
 .PHONY: go-balancer server demo
 
 balancer:
-	go build -o bin/balancer ./cmd/balancer
+	go build -o bin/gobal ./cmd/balancer
 
 server:
 	go build -o bin/server ./cmd/server
