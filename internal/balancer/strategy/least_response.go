@@ -99,39 +99,3 @@ func (lr *leastResponse) GetNextBackendIndex(backendList backend.ReadonlyBackend
 
 	return lowestDurationIndex
 }
-
-func (lr *leastResponse) AddBackends(n int) {
-	newMeasurementQueues := make([]util.Queue[time.Duration], len(lr.responseTimeMeasurements)+n)
-	newRespTimes := make([]time.Duration, len(lr.responseTimes)+n)
-
-	for i := 0; i < len(lr.responseTimeMeasurements); i++ {
-		newMeasurementQueues[i] = lr.responseTimeMeasurements[i]
-		newRespTimes[i] = lr.responseTimes[i]
-	}
-	for i := len(lr.responseTimeMeasurements); i < len(lr.responseTimeMeasurements)+n; i++ {
-		newMeasurementQueues[i] = util.NewRingBufferQueue[time.Duration](MEASUREMENT_QUEUE_SIE)
-		newRespTimes[i] = 0
-	}
-
-	lr.responseTimeMeasurements = newMeasurementQueues
-	lr.responseTimes = newRespTimes
-}
-
-func (lr *leastResponse) RemoveBackends(removedIndices []int) {
-	newMeasurementQueues := make([]util.Queue[time.Duration], len(lr.responseTimeMeasurements)-len(removedIndices))
-	newRespTimes := make([]time.Duration, len(lr.responseTimes)-len(removedIndices))
-
-	for i, n, m := 0, 0, 0; n < len(newMeasurementQueues); i++ {
-		if m >= len(removedIndices) || removedIndices[m] != i {
-			// this i was not removed, copy to new and increment new count n
-			newMeasurementQueues[n] = lr.responseTimeMeasurements[i]
-			newRespTimes[n] = lr.responseTimes[i]
-			n++
-		} else {
-			m++
-		}
-	}
-
-	lr.responseTimeMeasurements = newMeasurementQueues
-	lr.responseTimes = newRespTimes
-}

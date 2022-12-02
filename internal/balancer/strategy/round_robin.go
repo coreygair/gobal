@@ -106,34 +106,3 @@ func (rr *roundRobin) GetNextBackendIndex(backendList backend.ReadonlyBackendLis
 
 	return rr.i
 }
-
-func (rr *roundRobin) AddBackends(n int) {
-	rr.backendCount += n
-
-	newWeights := make([]int, rr.backendCount)
-
-	copy(newWeights, rr.weights)
-
-	// pad weights with 1's
-	for i := len(rr.weights); i < rr.backendCount; i++ {
-		newWeights[i] = 1
-	}
-
-	rr.weights = newWeights
-}
-
-func (rr *roundRobin) RemoveBackends(removedIndices []int) {
-	rr.backendCount -= len(removedIndices)
-
-	newWeights := make([]int, len(rr.weights)-len(removedIndices))
-	for i, n, r := 0, 0, 0; n < len(newWeights); i++ {
-		if r >= len(removedIndices) || i != removedIndices[r] {
-			newWeights[n] = rr.weights[i]
-			n++
-		} else {
-			r++
-		}
-	}
-
-	rr.weights = newWeights
-}

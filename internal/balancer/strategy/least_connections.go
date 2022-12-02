@@ -74,31 +74,3 @@ func (lc *leastConnections) GetNextBackendIndex(backendList backend.ReadonlyBack
 	// pick randomly out of the lowest connection backends
 	return leastConnBackendIndexes[rand.Intn(numLeastConnBackends)]
 }
-
-func (lc *leastConnections) AddBackends(n int) {
-	newConnCounts := make([]int, len(lc.connectionCounts)+n)
-
-	for i := 0; i < len(lc.connectionCounts); i++ {
-		newConnCounts[i] = lc.connectionCounts[i]
-	}
-	for i := len(lc.connectionCounts); i < len(lc.connectionCounts)+n; i++ {
-		newConnCounts[i] = 0
-	}
-
-	lc.connectionCounts = newConnCounts
-}
-
-func (lc *leastConnections) RemoveBackends(removedIndices []int) {
-	newConnCounts := make([]int, len(lc.connectionCounts)-len(removedIndices))
-
-	for i, n, m := 0, 0, 0; n < len(newConnCounts); i++ {
-		if m < len(removedIndices) && i == removedIndices[m] {
-			m++
-		} else {
-			newConnCounts[n] = lc.connectionCounts[i]
-			n++
-		}
-	}
-
-	lc.connectionCounts = newConnCounts
-}

@@ -13,8 +13,15 @@ import (
 
 type balancer struct {
 	backendManager *backend.BackendManager
-	strategy       strategy.BalancerStrategy
-	sticky         bool
+
+	// The strategy implements a load balancing algorithm which selects which backend to use next.
+	strategy strategy.BalancerStrategy
+	// The config that was used to build the current strategy.
+	// This is needed as when the backend list is updated, we rebuild the strategy from scratch.
+	// Therefore we need the original config to hand.
+	strategyConfig config.StrategyConfig
+
+	sticky bool
 
 	modifyMutex sync.RWMutex
 }
@@ -30,6 +37,7 @@ func NewBalancer(cfg config.Config) (balancer, error) {
 	return balancer{
 		backendManager: bm,
 		strategy:       strategy,
+		strategyConfig: cfg.Strategy,
 		sticky:         cfg.Sticky,
 	}, nil
 }
@@ -67,7 +75,10 @@ func (b *balancer) AddBackends(infos []config.BackendInfo) error {
 		return err
 	}
 
-	b.strategy.AddBackends(len(infos))
+	b.strategy, err = strategy.NewBalancerStrategy(b.strategyConfig, b.backendManager)
+	if err != nil {
+		return err
+	}
 
 	return nil
 }
@@ -76,13 +87,19 @@ func (b *balancer) AddBackends(infos []config.BackendInfo) error {
 //
 // Aquires a mutex which prevents other actions happening on the balancer,
 // before notifying the balancers components of the removed backends
-func (b *balancer) RemoveBackends(infos []config.BackendInfo) {
+func (b *balancer) RemoveBackends(infos []config.BackendInfo) error {
 	b.modifyMutex.Lock()
 	defer b.modifyMutex.Unlock()
 
-	removedIndices := b.backendManager.RemoveBackends(infos)
+	b.backendManager.RemoveBackends(infos)
 
-	b.strategy.RemoveBackends(removedIndices)
+	var err error
+	b.strategy, err = strategy.NewBalancerStrategy(b.strategyConfig, b.backendManager)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // Serve a http request using the balancer.

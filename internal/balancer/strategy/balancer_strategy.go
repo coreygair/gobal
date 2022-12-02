@@ -10,9 +10,6 @@ import (
 // Strategy pattern for choosing the next backend to use.
 type BalancerStrategy interface {
 	GetNextBackendIndex(backendList backend.ReadonlyBackendList, r *http.Request) int
-
-	AddBackends(n int)
-	RemoveBackends(indexes []int)
 }
 
 func NewBalancerStrategy(cfg config.StrategyConfig, backendManager *backend.BackendManager) (BalancerStrategy, error) {
