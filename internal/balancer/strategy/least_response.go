@@ -13,7 +13,7 @@ import (
 const MEASUREMENT_QUEUE_SIE = 10
 
 // Chooses backends based on recorded TTFB from previous requests.
-// Tracked with an exponential moving average.
+// Tracked with a simple moving average.
 type leastResponse struct {
 	// A list of queues of the last few TTFB measurements
 	responseTimeMeasurements []util.Queue[time.Duration]
