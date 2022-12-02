@@ -4,11 +4,14 @@ import (
 	"fmt"
 	"hash/maphash"
 	"net/http"
+	"sync"
 	"time"
 )
 
 type backendDurationMap struct {
 	m map[uint64]time.Duration
+
+	mapMutex sync.Mutex
 
 	hashSeed maphash.Seed
 }
@@ -21,15 +24,24 @@ func newBackendDurationMap() backendDurationMap {
 }
 
 func (bdm *backendDurationMap) Set(b *backend, d time.Duration) {
+	bdm.mapMutex.Lock()
+	defer bdm.mapMutex.Unlock()
+
 	bdm.m[maphash.String(bdm.hashSeed, b.url.String())] = d
 }
 
 func (bdm *backendDurationMap) Get(b *backend) (time.Duration, bool) {
+	bdm.mapMutex.Lock()
+	defer bdm.mapMutex.Unlock()
+
 	d, ok := bdm.m[maphash.String(bdm.hashSeed, b.url.String())]
 	return d, ok
 }
 
 func (bdm *backendDurationMap) Delete(b *backend) {
+	bdm.mapMutex.Lock()
+	defer bdm.mapMutex.Unlock()
+
 	delete(bdm.m, maphash.String(bdm.hashSeed, b.url.String()))
 }
 
