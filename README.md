@@ -73,7 +73,7 @@ PLANNED: weighted version.
 
 #### LEAST_RESP
 
-Dispatches rewuests to the backend with the lowest response time to recent requests.
+Dispatches requests to the backend with the lowest response time to recent requests.
 
 Measured by a simple moving average of recent request TTFB.
 
